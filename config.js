@@ -15,7 +15,7 @@ PONNA_ALERT: process.env.PONNA_ALERT === undefined ? 'false' : process.env.PONNA
 SEEDR_MAIL: '',
 SEEDR_PASSWORD: '',
 SUDO: '',//
-DB_NAME: 'pramaaaataaaaahaaaaggaaaajjaa',
+DB_NAME: 'zeus',
 LANG: 'SI',
 OWNER_NUMBER: '94774571418',
 TG_GROUP: ''
