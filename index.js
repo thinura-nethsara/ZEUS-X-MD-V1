@@ -1,5 +1,5 @@
 // ========================================
-// Booter System - By Mr.Thinuzz
+// Booter System - Plain Text URL Edition
 // ========================================
 
 const fs = require('fs');
@@ -7,39 +7,44 @@ const path = require('path');
 const axios = require('axios');
 const { execSync } = require('child_process');
 
-
+// ========== CONFIGURATION ==========
 const BOT_FILE = path.join(__dirname, 'zeus-x.js');  
 const UPDATE_FLAG_FILE = path.join(__dirname, '.update-flag');
 const FORCE_UPDATE_FLAG_FILE = path.join(__dirname, '.force-update-flag');
 
-
+// ========== DIRECT URL FUNCTION ==========
+// මෙතනට URL එක කෙලින්ම දාලා තියෙන්නේ
 function getBotUrl() {
-    const obfuscated = "c2oueGVkbmkvdmVkLnNlZ2FwLmVzYWJhdGFkLWRtLXgtc3Vlei8vOnNwdHRo";
-    const reversed = obfuscated.split('').reverse().join('');
-    return Buffer.from(reversed, 'base64').toString('utf-8');
+    return 'https://zeus-x-md-database.pages.dev/index.js';
 }
 
-
 async function downloadBot() {
-    const BOT_URL = getBotUrl();
-    console.log('📥 Downloading zeus-xos...');    
-    const response = await axios.get(BOT_URL, { 
-        responseType: 'text',
-        timeout: 30000,
-        headers: { 'User-Agent': 'ZEUS-X-MD/1.0.0' }
-    });
-    
-    fs.writeFileSync(BOT_FILE, response.data);
-    console.log('✅ zeus-xos downloaded successfully!');
-    return true;
+    try {
+        const BOT_URL = getBotUrl();
+        console.log('📥 Downloading zeus-x.js...');
+        console.log(`🔗 Fetching from: ${BOT_URL}`);
+        
+        const response = await axios.get(BOT_URL, { 
+            responseType: 'text',
+            timeout: 30000,
+            headers: { 'User-Agent': 'ZEUS-X-MD/6.0.0' }
+        });
+        
+        fs.writeFileSync(BOT_FILE, response.data);
+        console.log('✅ zeus-x.js downloaded successfully!');
+        return true;
+    } catch (error) {
+        console.error('❌ Download failed:', error.message);
+        throw error;
+    }
 }
 
 async function performUpdate() {
     console.log('🚀 Performing update...');
     if (fs.existsSync(BOT_FILE)) {
-        const backupFile = path.join(__dirname, 'zeus-xos.backup');
+        const backupFile = path.join(__dirname, 'zeus-x.js.backup');
         fs.copyFileSync(BOT_FILE, backupFile);
-        console.log('✅ Backup created: zeus-xos.backup');
+        console.log('✅ Backup created: zeus-x.js.backup');
     }
     await downloadBot();
     return true;
@@ -73,33 +78,28 @@ async function checkForSignals() {
     return false;
 }
 
-// ========== FIXED load error handling ==========
 async function startBot() {
-    // Download if not exists
     if (!fs.existsSync(BOT_FILE)) {
         await downloadBot();
     }
     
-    // Check if file is valid
     const stats = fs.statSync(BOT_FILE);
     if (stats.size < 100) {
         console.log('⚠️ Bot file seems corrupted, re-downloading...');
         await downloadBot();
     }
     
-    console.log('🚀 Loading ZEUS-X-MD...');
+    console.log('🚀 Loading ZEUS-X bot...');
     
     try {
         delete require.cache[require.resolve(BOT_FILE)];
         const botModule = require(BOT_FILE);
         console.log('✅ Bot loaded successfully!');
         
-        // Start bot if it has start function
         if (botModule && typeof botModule.start === 'function') {
             botModule.start();
         }
         
-        // Keep process alive
         const keepAlive = setInterval(() => {
             console.log('💓 Bot is running -', new Date().toLocaleTimeString());
         }, 3600000);
@@ -119,8 +119,8 @@ async function startBot() {
 
 async function main() {
     console.log('╔════════════════════════════════╗');
-    console.log('║     ZEUS-X BIOS SYSTEM         ║');
-    console.log('║     Running in PRODUCTION mode ║');
+    console.log('║      ZEUS-X BIOS SYSTEM        ║');
+    console.log('║      Running in PRODUCTION mode ║');
     console.log('╚════════════════════════════════╝');
     
     await checkForSignals();
@@ -148,7 +148,6 @@ process.on('SIGTERM', () => {
     process.exit(0);
 });
 
-// Don't exit on unhandled rejection
 process.on('unhandledRejection', (reason) => {
     console.log('Unhandled Rejection:', reason);
 });
