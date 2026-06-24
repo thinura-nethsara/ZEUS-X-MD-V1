@@ -7,7 +7,7 @@
     "stop": "pm2 stop Nexus-md",
     "restart": "git pull && npm stop && npm start",
     "stash": "git stash && git stash drop"
-  },
+  }, 
   "dependencies": {
     "@adiwajshing/keyed-db": "latest",
     "@ffmpeg-installer/ffmpeg": "latest",
